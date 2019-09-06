@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = reliant_party
+omit = site-packages
+
+[html]
+directory = coverage
