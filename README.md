@@ -23,3 +23,5 @@ strategy:
         kind: ImageStreamTag
         name: 'python:3.6'
         namespace: openshift
+
+--patch '{"spec":{"strategy": {"sourceStrategy":{env:}}}'
