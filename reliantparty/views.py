@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import permissions
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import status
 
@@ -9,12 +10,18 @@ from .serializers import ReliantPartySerializer
 from .decorators import validate_request_reliant_party_data
 
 # Create your views here.
-class ListReliantParties(generics.ListCreateAPIView):
+class ReliantPartiesAPI(viewsets.ModelViewSet):
+    
     queryset = ReliantParty.objects.all()
     serializer_class = ReliantPartySerializer
 
+    def list(self, request):
+        queryset = ReliantParty.objects.all()
+        serializer = ReliantPartySerializer(queryset, many=True)
+        return Response(serializer.data)
+
     @validate_request_reliant_party_data
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         a_party = ReliantParty.objects.create(
             name=request.data["name"],
             status=request.data["status"],
@@ -25,16 +32,8 @@ class ListReliantParties(generics.ListCreateAPIView):
             data=ReliantPartySerializer(a_party).data,
             status=status.HTTP_201_CREATED
         )
-
-class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
-    # GET reliantparties/:id/
-    # PUT reliantparties/:id/
-    # DELETE reliantparties/:id/
-
-    queryset = ReliantParty.objects.all()
-    serializer_class = ReliantPartySerializer
-
-    def get(self, request, *args, **kwargs):
+    
+    def retrieve(self, request, *args, **kwargs):
         try:
             a_party = self.queryset.get(pk=kwargs["pk"])
             return Response(ReliantPartySerializer(a_party).data)
@@ -47,7 +46,7 @@ class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
             )
     
     @validate_request_reliant_party_data
-    def put(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         try:
             a_party = self.queryset.get(pk=kwargs["pk"])
             serializer = ReliantPartySerializer()
@@ -61,7 +60,7 @@ class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
     
-    def delete(self, request, *args, **kwargs):
+    def destroy(self, request, *args, **kwargs):
         try:
             a_party = self.queryset.get(pk=kwargs["pk"])
             a_party.delete()
@@ -73,3 +72,4 @@ class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+

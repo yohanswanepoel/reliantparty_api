@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.conf.urls import url
+from rest_framework.routers import DefaultRouter
+
+#router = DefaultRouter()
+#router.register(r'reliant_parties',views.ListReliantParties)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path('api/(?P<version>(v1|v2))/', include('reliantparty.urls')),
+    re_path('api/v1/', include('reliantparty.urls')),
 ]

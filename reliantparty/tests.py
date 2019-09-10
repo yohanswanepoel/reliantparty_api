@@ -3,8 +3,11 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
+from rest_framework import views
 from .models import ReliantParty
+from .views import ReliantPartiesAPI
 from .serializers import ReliantPartySerializer
+from django.urls import get_resolver
 
 # Create your tests here.
 class BaseViewTest(APITestCase):
@@ -23,21 +26,15 @@ class BaseViewTest(APITestCase):
         """
         if kind == "post":
             return self.client.post(
-                reverse(
-                    "reliantparties-list-create",
-                    kwargs={
-                        "version": kwargs["version"]
-                    }
-                ),
+                reverse("reliantparty-list"),
                 data=json.dumps(kwargs["data"]),
                 content_type='application/json'
             )
         elif kind == "put":
             return self.client.put(
                 reverse(
-                    "reliantparties-detail",
+                    "reliantparty-detail",
                     kwargs={
-                        "version": kwargs["version"],
                         "pk": kwargs["id"]
                     }
                 ),
@@ -50,9 +47,8 @@ class BaseViewTest(APITestCase):
     def delete_a_party(self, pk=0):
         return self.client.delete(
             reverse(
-                "reliantparties-detail",
+                "reliantparty-detail",
                 kwargs={
-                    "version": "v1",
                     "pk": pk
                 }
             )
@@ -75,8 +71,8 @@ class BaseViewTest(APITestCase):
 class GetAllReliantPartiesTest(BaseViewTest):
 
     def test_get_all_reliant_parties(self):
-        response = self.client.get(
-            reverse("reliantparties-list-create",kwargs={"version":"v1"})
+        response = views.response = self.client.get(
+            reverse("reliantparty-list")
         )
         expected = ReliantParty.objects.all()
         serialized = ReliantPartySerializer(expected, many=True)
@@ -86,6 +82,9 @@ class GetAllReliantPartiesTest(BaseViewTest):
 class AddReliantPartyTest(BaseViewTest):
 
     def test_create_reliant_party(self):
+        print(".................................")
+        print(get_resolver().reverse_dict.keys())
+
         response = self.make_a_request(
             kind="post",
             version="v1",
