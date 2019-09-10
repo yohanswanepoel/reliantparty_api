@@ -4,10 +4,14 @@ from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import status
+from rest_framework_swagger.views import get_swagger_view
+
 
 from .models import ReliantParty
 from .serializers import ReliantPartySerializer
 from .decorators import validate_request_reliant_party_data
+
+schema_view = get_swagger_view(title='Pastebin API')
 
 # Create your views here.
 class ReliantPartiesAPI(viewsets.ModelViewSet):
