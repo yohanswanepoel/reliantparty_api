@@ -11,7 +11,7 @@ from .models import ReliantParty
 from .serializers import ReliantPartySerializer
 from .decorators import validate_request_reliant_party_data
 
-schema_view = get_swagger_view(title='Pastebin API')
+schema_view = get_swagger_view(title='Reliant Party API')
 
 # Create your views here.
 class ReliantPartiesAPI(viewsets.ModelViewSet):
