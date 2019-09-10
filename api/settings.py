@@ -80,14 +80,9 @@ WSGI_APPLICATION = 'api.wsgi.application'
 def config():
     service_name = os.getenv('DATABASE_SERVICE_NAME', '')
     if service_name:
-        engine = engines.get(os.getenv('DATABASE_ENGINE'), engines['sqlite'])
-    else:
-        engine = engines['sqlite']
-    name = os.getenv('DATABASE_NAME')
-    if service_name:
         return {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': name,
+            'NAME':  os.getenv('DATABASE_NAME'),
             'USER': os.getenv('DATABASE_USER'),
             'PASSWORD': os.getenv('DATABASE_PASSWORD'),
             'HOST': os.getenv('DATABASE_SERVICE_NAME'),
