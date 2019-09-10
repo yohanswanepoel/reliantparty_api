@@ -87,7 +87,7 @@ def config():
             'USER': os.getenv('DATABASE_USER'),
             'PASSWORD': os.getenv('DATABASE_PASSWORD'),
             'HOST': os.getenv('DATABASE_SERVICE_NAME'),
-            'PORT': 5328,
+            'PORT': 5432,
         }
     else:
         print(".....................................SETUP SQL LITE....................")
