@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.views import status
+from rest_framework.views import status as st
 
 
 def validate_request_reliant_party_data(fn):
@@ -14,7 +14,7 @@ def validate_request_reliant_party_data(fn):
                 data={
                     "message": "All fields are mandatory"
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=st.HTTP_400_BAD_REQUEST
             )
         return fn(*args, **kwargs)
     return decorated

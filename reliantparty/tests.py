@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
@@ -46,7 +47,7 @@ class BaseViewTest(APITestCase):
         else:
             return None
 
-    def delete_a_song(self, pk=0):
+    def delete_a_party(self, pk=0):
         return self.client.delete(
             reverse(
                 "reliantparties-detail",
@@ -75,7 +76,7 @@ class GetAllReliantPartiesTest(BaseViewTest):
 
     def test_get_all_reliant_parties(self):
         response = self.client.get(
-            reverse("reliantparties-all",kwargs={"version":"v1"})
+            reverse("reliantparties-list-create",kwargs={"version":"v1"})
         )
         expected = ReliantParty.objects.all()
         serialized = ReliantPartySerializer(expected, many=True)
@@ -86,9 +87,9 @@ class AddReliantPartyTest(BaseViewTest):
 
     def test_create_reliant_party(self):
         response = self.make_a_request(
-            "kind"="post",
-            "version"="v1",
-            "data"=self.valid_data
+            kind="post",
+            version="v1",
+            data=self.valid_data
         )
         self.assertEqual(response.data, self.valid_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -99,3 +100,31 @@ class AddReliantPartyTest(BaseViewTest):
             data=self.invalid_data
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class UpdateReliantPartyTest(BaseViewTest):
+
+    def test_update_reliant_party(self):
+        response = self.make_a_request(
+            kind="put",
+            version="v1",
+            id=2,
+            data=self.valid_data
+        )
+        self.assertEqual(response.data, self.valid_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # test with invalid data
+        response = self.make_a_request(
+            kind="put",
+            version="v1",
+            id=2,
+            data=self.invalid_data
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class DeleteReliantPartyTest(BaseViewTest):
+
+    def test_delete_reliant_party(self):
+        response = self.delete_a_party(1)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response = self.delete_a_party(100)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

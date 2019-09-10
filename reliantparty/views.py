@@ -3,16 +3,28 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import status
-from rest_framework_jwt.settings import api_settings
 
 from .models import ReliantParty
 from .serializers import ReliantPartySerializer
 from .decorators import validate_request_reliant_party_data
 
 # Create your views here.
-class ListReliantParties(generics.ListAPIView):
+class ListReliantParties(generics.ListCreateAPIView):
     queryset = ReliantParty.objects.all()
     serializer_class = ReliantPartySerializer
+
+    @validate_request_reliant_party_data
+    def post(self, request, *args, **kwargs):
+        a_party = ReliantParty.objects.create(
+            name=request.data["name"],
+            status=request.data["status"],
+            email=request.data["email"],
+            abn=request.data["abn"]
+        )
+        return Response(
+            data=ReliantPartySerializer(a_party).data,
+            status=status.HTTP_201_CREATED
+        )
 
 class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
     # GET reliantparties/:id/
@@ -30,7 +42,7 @@ class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data = {
                     "message": "Reliant party does not exist: ".format(kwargs["pk"])
-                }
+                },
                 status=status.HTTP_404_NOT_FOUND
             )
     
@@ -45,7 +57,7 @@ class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data = {
                     "message": "Reliant party does not exist: ".format(kwargs["pk"])
-                }
+                },
                 status=status.HTTP_404_NOT_FOUND
             )
     
@@ -58,6 +70,6 @@ class ReliantPartyDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(
                 data = {
                     "message": "Reliant party does not exist: ".format(kwargs["pk"])
-                }
+                },
                 status=status.HTTP_404_NOT_FOUND
             )
