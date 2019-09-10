@@ -68,10 +68,18 @@ class BaseViewTest(APITestCase):
             "abn": "test artist"
         }
 
+class HealthAPITest(BaseViewTest):
+
+    def test_health_endpoint(self):
+        response = self.client.get(
+            reverse("health-list")
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class GetAllReliantPartiesTest(BaseViewTest):
 
     def test_get_all_reliant_parties(self):
-        response = views.response = self.client.get(
+        response = self.client.get(
             reverse("reliantparty-list")
         )
         expected = ReliantParty.objects.all()

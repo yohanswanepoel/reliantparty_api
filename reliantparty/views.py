@@ -13,6 +13,13 @@ from .decorators import validate_request_reliant_party_data
 
 schema_view = get_swagger_view(title='Reliant Party API')
 
+
+class HealthAPI(viewsets.ViewSet):
+
+	def list(self, request, format=None):
+		data = { "status": "up" }
+		return Response(data)	
+
 # Create your views here.
 class ReliantPartiesAPI(viewsets.ModelViewSet):
     
