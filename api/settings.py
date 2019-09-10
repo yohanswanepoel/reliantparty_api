@@ -80,6 +80,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 def config():
     service_name = os.getenv('DATABASE_SERVICE_NAME', '')
     if service_name:
+        print(".....................................SETUP POSTGRES....................")
         return {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME':  os.getenv('DATABASE_NAME'),
@@ -89,6 +90,7 @@ def config():
             'PORT': 5328,
         }
     else:
+        print(".....................................SETUP SQL LITE....................")
         #name = os.path.join(settings.BASE_DIR, 'db.sqlite3')
         name = 'sampledb'
         return {
