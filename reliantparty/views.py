@@ -42,7 +42,11 @@ class ReliantPartiesAPI(viewsets.ModelViewSet):
         return Response(content)
 
     def list(self, request):
-        queryset = ReliantParty.objects.all()
+        status = self.request.query_params.get('status', None)
+        if status is not None:
+            queryset = ReliantParty.objects.filter(status=status)
+        else:
+            queryset = ReliantParty.objects.all()
         serializer = ReliantPartySerializer(queryset, many=True)
         return Response(serializer.data)
 
