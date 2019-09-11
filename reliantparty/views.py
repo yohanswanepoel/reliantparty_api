@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import status
 from rest_framework_swagger.views import get_swagger_view
@@ -25,6 +26,20 @@ class ReliantPartiesAPI(viewsets.ModelViewSet):
     
     queryset = ReliantParty.objects.all()
     serializer_class = ReliantPartySerializer
+    filter_fields = ('status')
+
+    def get_queryset(self, query_params):
+        status = self.request.query_params.get('status', None)
+        if status is not None:
+            return ReliantParty.objects.filter(status=status)
+        else:
+            return ReliantParty.objects.all()
+
+    @action(detail=False)
+    def count(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(request.query_params))
+        content = {'count': queryset.count()}
+        return Response(content)
 
     def list(self, request):
         queryset = ReliantParty.objects.all()

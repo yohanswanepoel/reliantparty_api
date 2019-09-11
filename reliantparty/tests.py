@@ -76,6 +76,15 @@ class HealthAPITest(BaseViewTest):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+class CountTests(BaseViewTest):
+
+    def test_count(self):
+        response = self.client.get(
+            reverse("reliantparty-count")
+        )
+        self.assertIn("count",json.dumps(response.data))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class GetAllReliantPartiesTest(BaseViewTest):
 
     def test_get_all_reliant_parties(self):
