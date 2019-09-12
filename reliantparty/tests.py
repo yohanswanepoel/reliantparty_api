@@ -58,6 +58,7 @@ class BaseViewTest(APITestCase):
         self.create_reliant_party("Name1","name@email.com","some abn","active")
         self.create_reliant_party("Name2","name@email.com","some abn 2","testing")
         self.valid_data = {
+            "pk": 2,
             "name": "test song",
             "status": "test artist",
             "email": "test song",
