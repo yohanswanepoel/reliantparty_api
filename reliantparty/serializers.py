@@ -4,4 +4,4 @@ from .models import ReliantParty
 class ReliantPartySerializer(serializers.ModelSerializer):
     class Meta:
         model = ReliantParty
-        fields = ("name","status","email",'abn')
+        fields = ("pk","name","status","email",'abn')
