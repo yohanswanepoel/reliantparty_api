@@ -36,7 +36,8 @@ class ReliantPartiesAPI(viewsets.ModelViewSet):
             return ReliantParty.objects.all()
 
     @action(detail=False)
-    def clear(self, request, *args, **kwargs):
+    def clear(self, request):
+        print("..........CLEAR SOME THINGS.............")
         ReliantParty.objects.all().delete()
         content = {'result': 'done'}
         return Response(content)
