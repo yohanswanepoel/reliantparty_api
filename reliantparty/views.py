@@ -9,7 +9,7 @@ from rest_framework_swagger.views import get_swagger_view
 
 
 from .models import ReliantParty
-from .serializers import ReliantPartySerializer
+from .serializers import ReliantPartySerializer, ReliantPartyDetailSerializer
 from .decorators import validate_request_reliant_party_data
 
 schema_view = get_swagger_view(title='Reliant Party API')
@@ -59,14 +59,14 @@ class ReliantPartiesAPI(viewsets.ModelViewSet):
             abn=request.data["abn"]
         )
         return Response(
-            data=ReliantPartySerializer(a_party).data,
+            data=ReliantPartyDetailSerializer(a_party).data,
             status=status.HTTP_201_CREATED
         )
     
     def retrieve(self, request, *args, **kwargs):
         try:
             a_party = self.queryset.get(pk=kwargs["pk"])
-            return Response(ReliantPartySerializer(a_party).data)
+            return Response(ReliantPartyDetailSerializer(a_party).data)
         except ReliantParty.DoesNotExist:
             return Response(
                 data = {
@@ -81,7 +81,7 @@ class ReliantPartiesAPI(viewsets.ModelViewSet):
             a_party = self.queryset.get(pk=kwargs["pk"])
             serializer = ReliantPartySerializer()
             updated_party = serializer.update(a_party, request.data)
-            return Response(ReliantPartySerializer(updated_party).data)
+            return Response(ReliantPartyDetailSerializer(updated_party).data)
         except ReliantParty.DoesNotExist:
             return Response(
                 data = {

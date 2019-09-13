@@ -58,7 +58,7 @@ class BaseViewTest(APITestCase):
         self.create_reliant_party("Name1","name@email.com","some abn","active")
         self.create_reliant_party("Name2","name@email.com","some abn 2","testing")
         self.valid_data = {
-            "pk": 2,
+            "id": 2,
             "name": "test song",
             "status": "test artist",
             "email": "test song",
@@ -121,13 +121,23 @@ class AddReliantPartyTest(BaseViewTest):
 class UpdateReliantPartyTest(BaseViewTest):
 
     def test_update_reliant_party(self):
+        # get valid data
+        response = self.client.get(
+            reverse("reliantparty-detail",
+                kwargs={
+                    "pk": 2
+                }
+            )
+        )
+        previous_data = response.data
+        previous_data.status = "New"
         response = self.make_a_request(
             kind="put",
             version="v1",
             id=2,
-            data=self.valid_data
+            data=previous_data
         )
-        self.assertEqual(response.data, self.valid_data)
+        self.assertEqual(response.data, previous_data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # test with invalid data
         response = self.make_a_request(
