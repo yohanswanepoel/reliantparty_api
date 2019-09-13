@@ -36,6 +36,12 @@ class ReliantPartiesAPI(viewsets.ModelViewSet):
             return ReliantParty.objects.all()
 
     @action(detail=False)
+    def clear(self, request, *args, **kwargs):
+        ReliantParty.objects.all().delete()
+        content = {'result': 'done'}
+        return Response(content)
+
+    @action(detail=False)
     def count(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset(request.query_params))
         content = {'count': queryset.count()}
