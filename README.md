@@ -1,27 +1,26 @@
-# reliantparty_api
+# Reliant Party API
 
+## Useful links and information
+
+API endpoint for local testing
+```
 http://127.0.0.1:8000/api/v1/reliantparties/
+```
 
+API endpoint for health check
+````
 /api/v1/health/
+```
 
-# TODO
-* Patch Build Config
-* Needs test DB in Postgresql
-strategy:
-    sourceStrategy:
-      env:
-        - name: PIP_INDEX_URL
-        - name: DATABASE_NAME
-          value: sampledb
-        - name: DATABASE_USER
-          value: user
-        - name: DATABASE_PASSWORD
-          value: password
-        - name: DATABASE_SERVICE_NAME
-          value: testdb
-      from:
-        kind: ImageStreamTag
-        name: 'python:3.6'
-        namespace: openshift
+API Swagger UI - in a browser
+````
+/api/v1/reliantparties/
+```
 
---patch '{"spec":{"strategy": {"sourceStrategy":{env:}}}'
+* Project is built using Django Rest Framework
+* Deploys using standard OpenShift Django Template
+* Unit Tests run using SQL Lite
+* Runtime requires PostgreSQL in OpenShift if **DATABASE_SERVICE_NAME** is set
+
+## TODO
+* Lots
